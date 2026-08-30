@@ -488,8 +488,10 @@
     if(!NT){ setStat('⚠️ 同步组件加载失败 · 改动只存本机'); return; }
     try{
       pool=new NT.SimplePool();
-      const query=pool.querySync(RELAYS,{kinds:[30078],authors:[NOSTR_PK],'#d':[DTAG]});
-      const evs=await Promise.race([query,new Promise(r=>setTimeout(()=>r([]),15000))]);
+      // 国内网络到中继较慢，把连接超时从默认 4.4s 放宽到 25s
+      await Promise.allSettled(RELAYS.map(u=>pool.ensureRelay(u,{connectionTimeout:25000})));
+      const query=pool.querySync(RELAYS,{kinds:[30078],authors:[NOSTR_PK],'#d':[DTAG]},{maxWait:25000});
+      const evs=await Promise.race([query,new Promise(r=>setTimeout(()=>r([]),30000))]);
       const latest=(evs||[]).sort((a,b)=>b.created_at-a.created_at)[0];
       if(latest){
         const d=JSON.parse(latest.content||'{}');
@@ -513,6 +515,7 @@
     if(!NT||!pool){ setStat('⚠️ 云端未连接 · 已存本机'); return; }
     setStat('☁️ 同步中…');
     try{
+      await Promise.allSettled(RELAYS.map(u=>pool.ensureRelay(u,{connectionTimeout:25000})));
       const sk=Uint8Array.from(NOSTR_SK.match(/../g).map(h=>parseInt(h,16)));
       const ev=NT.finalizeEvent({
         kind:30078, created_at:Math.floor(Date.now()/1000), tags:[['d',DTAG]],
@@ -569,6 +572,7 @@
       localStorage.removeItem(KEY+'-meta');
       if(NT&&pool){
         try{
+          await Promise.allSettled(RELAYS.map(u=>pool.ensureRelay(u,{connectionTimeout:25000})));
           const sk=Uint8Array.from(NOSTR_SK.match(/../g).map(h=>parseInt(h,16)));
           const ev=NT.finalizeEvent({kind:30078,created_at:Math.floor(Date.now()/1000),tags:[['d',DTAG]],
             content:JSON.stringify({tables:{},updatedAt:new Date().toISOString()})},sk);
