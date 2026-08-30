@@ -433,7 +433,7 @@
   </table>
 
   <footer>
-    英国行程 · 助理版（表格速览）· 2026.08.28<br>
+    英国行程 · 助理版（表格速览）· 2026.08.30 · ☁️ 网页改完自动同步<br>
     📒 待办一张表 · 📅 每天一张表 · ✅ 交通已定（D2/D9 包车 · 租车两段 · 打车若干 · 送机）· ⏳ 只剩 D1 接机和 D3 市内待确认
   </footer>
 
@@ -441,19 +441,88 @@
 
 <div id="editbar">
   <button id="btnEdit">✏️ 编辑模式</button>
-  <button id="btnExport" style="display:none">📤 导出变更发给老板</button>
-  <button id="btnReset" style="display:none">🔁 重置我的修改</button>
-  <span id="editnote">✅ 编辑中：直接点表格文字修改（状态、确认号都能改）。修改只保存在<b>你自己这台设备</b>的浏览器里，改完点「导出变更」发给老板同步。</span>
+  <button id="btnExport" style="display:none">📤 导出变更（备用）</button>
+  <button id="btnReset" style="display:none">🔁 重置修改</button>
+  <span id="editnote">✅ 编辑中：直接点表格文字改（状态、确认号都能改），<b>改动自动云端同步</b>，对方刷新页面就能看到最新版。</span>
+  <span id="syncstat" style="margin-left:auto;opacity:.9;font-size:12px">☁️ …</span>
 </div>
 
 <script>
 (function(){
   const KEY='uk-trip-edits-v1';
+  // —— 云端同步（Nostr 公共中继，免注册，多中继冗余）——
+  const NOSTR_SK='b8f1c2d7680be8097a0ad682ac7fd0247a84f5c8f33be15c9ccd465e30ae2e8f';
+  const NOSTR_PK='0d6af0aa1f086e0190aea095e5aa50e99afcadf3642ce82b8c5184426dba4cdd';
+  const RELAYS=['wss://relay.damus.io','wss://nos.lol','wss://nostr.mom','wss://offchain.pub'];
+  const DTAG='uk-trip-2026-edits';
+  const CDNS=['https://cdn.jsdelivr.net/npm/nostr-tools@2.13.0/+esm','https://unpkg.com/nostr-tools@2.13.0/+esm'];
+
   const tables=[...document.querySelectorAll('table')];
+  const stat=document.getElementById('syncstat');
+  let localStamp=0, cloudStamp=0, putTimer=null, NT=null, pool=null;
+
+  function setStat(t){ if(stat) stat.textContent=t; }
+  function applyObj(obj){
+    tables.forEach((t,i)=>{ if(obj && obj[i]){ try{ t.innerHTML=obj[i]; }catch(e){} } });
+  }
+  function collectObj(){
+    const o={}; tables.forEach((t,i)=>{ o[i]=t.innerHTML; }); return o;
+  }
+  function saveLocal(){
+    tables.forEach((t,i)=>localStorage.setItem(KEY+'-'+i,t.innerHTML));
+    localStamp=Date.now();
+    localStorage.setItem(KEY+'-meta',String(localStamp));
+  }
+
+  // ① 先用本机缓存渲染（秒开）
+  try{ localStamp=parseInt(localStorage.getItem(KEY+'-meta')||'0',10)||0; }catch(e){}
   tables.forEach((t,i)=>{
     const saved=localStorage.getItem(KEY+'-'+i);
     if(saved){ try{ t.innerHTML=saved; }catch(e){} }
   });
+
+  // ② 连接云端
+  setStat('☁️ 正在连接云端…');
+  (async()=>{
+    for(const c of CDNS){ try{ NT=await import(c); break; }catch(e){} }
+    if(!NT){ setStat('⚠️ 同步组件加载失败 · 改动只存本机'); return; }
+    try{
+      pool=new NT.SimplePool();
+      const query=pool.querySync(RELAYS,{kinds:[30078],authors:[NOSTR_PK],'#d':[DTAG]});
+      const evs=await Promise.race([query,new Promise(r=>setTimeout(()=>r([]),15000))]);
+      const latest=(evs||[]).sort((a,b)=>b.created_at-a.created_at)[0];
+      if(latest){
+        const d=JSON.parse(latest.content||'{}');
+        cloudStamp=Date.parse(d.updatedAt||'')||0;
+        if(d.tables && cloudStamp>localStamp){
+          applyObj(d.tables);
+          tables.forEach((t,i)=>localStorage.setItem(KEY+'-'+i,t.innerHTML));
+          localStamp=cloudStamp;
+          localStorage.setItem(KEY+'-meta',String(cloudStamp));
+        }
+        const when=d.updatedAt?new Date(d.updatedAt).toLocaleString('zh-CN',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}):'';
+        setStat('☁️ 已同步'+(when?' · 最近保存 '+when:''));
+      }else{
+        setStat('☁️ 已连接');
+      }
+      if(localStamp>cloudStamp) pushCloud(); // 本机有未同步改动，补推
+    }catch(e){ setStat('⚠️ 云端暂不可用 · 改动先存本机'); }
+  })();
+
+  async function pushCloud(){
+    if(!NT||!pool){ setStat('⚠️ 云端未连接 · 已存本机'); return; }
+    setStat('☁️ 同步中…');
+    try{
+      const sk=Uint8Array.from(NOSTR_SK.match(/../g).map(h=>parseInt(h,16)));
+      const ev=NT.finalizeEvent({
+        kind:30078, created_at:Math.floor(Date.now()/1000), tags:[['d',DTAG]],
+        content:JSON.stringify({tables:collectObj(),updatedAt:new Date().toISOString()})
+      },sk);
+      const rs=await Promise.allSettled(pool.publish(RELAYS,ev));
+      if(rs.some(r=>r.status==='fulfilled')){ cloudStamp=Date.now(); setStat('☁️ 已同步 · 对方刷新可见'); }
+      else setStat('⚠️ 同步失败 · 已存本机，重新打开会自动补同步');
+    }catch(e){ setStat('⚠️ 同步失败 · 已存本机'); }
+  }
 
   let editOn=false;
   const bE=document.getElementById('btnEdit'),
@@ -476,8 +545,9 @@
     if(!editOn) return;
     const t=e.target.closest('table');
     if(!t) return;
-    const i=tables.indexOf(t);
-    localStorage.setItem(KEY+'-'+i,t.innerHTML);
+    saveLocal();
+    clearTimeout(putTimer);
+    putTimer=setTimeout(pushCloud,1000);
   });
 
   bX.onclick=()=>{
@@ -489,13 +559,22 @@
     });
     const txt=lines.join('\n');
     (navigator.clipboard?navigator.clipboard.writeText(txt):Promise.reject())
-      .then(()=>{ bX.textContent='✅ 已复制，去微信/飞书粘贴'; setTimeout(()=>bX.textContent='📤 导出变更发给老板',2500); })
+      .then(()=>{ bX.textContent='✅ 已复制，去微信/飞书粘贴'; setTimeout(()=>bX.textContent='📤 导出变更（备用）',2500); })
       .catch(()=>{ prompt('复制下面内容发给老板：',txt); });
   };
 
-  bR.onclick=()=>{
-    if(confirm('确定清除你在这台设备上的全部修改，恢复成发布时的版本？')){
+  bR.onclick=async()=>{
+    if(confirm('确定清除全部修改，恢复成发布时的版本？（云端也会一起清掉）')){
       tables.forEach((t,i)=>localStorage.removeItem(KEY+'-'+i));
+      localStorage.removeItem(KEY+'-meta');
+      if(NT&&pool){
+        try{
+          const sk=Uint8Array.from(NOSTR_SK.match(/../g).map(h=>parseInt(h,16)));
+          const ev=NT.finalizeEvent({kind:30078,created_at:Math.floor(Date.now()/1000),tags:[['d',DTAG]],
+            content:JSON.stringify({tables:{},updatedAt:new Date().toISOString()})},sk);
+          await Promise.allSettled(pool.publish(RELAYS,ev));
+        }catch(e){}
+      }
       location.reload();
     }
   };
