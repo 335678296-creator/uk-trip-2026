@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>英国行程 · 2026</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    background: #f5f4f0; color: #2b2b2b; line-height:1.65; padding-bottom: 50px;
+  }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 0 16px; }
+  a { color: #2c5f7c; text-decoration: none; font-weight: 600; }
+
+  header {
+    background: linear-gradient(135deg, #1e3a5a 0%, #2c5f7c 55%, #7ca6a0 100%);
+    color: #fff; padding: 34px 20px 32px; text-align: center;
+  }
+  header h1 { font-size:24px; font-weight:700; margin-bottom:6px; }
+  header p { font-size:13.5px; opacity:.85; }
+
+  .route {
+    background:#fff; border-radius:12px; padding:14px 18px; margin:-18px auto 18px;
+    box-shadow:0 4px 16px rgba(30,58,90,.12); font-size:14px; text-align:center;
+    color:#1e3a5a; font-weight:600;
+  }
+  .route small { display:block; font-weight:400; color:#777; font-size:12px; margin-top:5px; }
+
+  h2.sec {
+    font-size:18px; margin:34px 0 12px; padding-left:12px;
+    border-left:5px solid #2c5f7c; color:#1e3a5a; letter-spacing:1px;
+  }
+  h3.day-t {
+    font-size:16px; color:#1e3a5a; margin:22px 0 8px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;
+  }
+  h3.day-t .dnum { background:#2c5f7c; color:#fff; border-radius:7px; padding:1px 10px; font-size:12.5px; }
+  h3.day-t small { font-size:12.5px; color:#999; font-weight:400; }
+
+  table { width:100%; border-collapse:collapse; font-size:13px; background:#fff; border-radius:12px;
+    overflow:hidden; box-shadow:0 2px 10px rgba(30,58,90,.08); margin-bottom:6px; }
+  th { background:#2c5f7c; color:#fff; padding:8px 10px; text-align:left; font-weight:600; white-space:nowrap; }
+  td { padding:8px 10px; border-bottom:1px solid #eee; vertical-align:middle; }
+  tr:last-child td { border-bottom:none; }
+
+  .st-ok   { color:#2d5a45; font-weight:600; white-space:nowrap; }
+  .st-todo { color:#c05a5a; font-weight:600; white-space:nowrap; }
+  .st-wait { color:#b07d2a; font-weight:600; white-space:nowrap; }
+  .st-free { color:#888; white-space:nowrap; }
+
+  .where { display:flex; align-items:center; gap:10px; }
+  .where img { width:96px; height:64px; object-fit:cover; border-radius:7px; flex-shrink:0;
+    box-shadow:0 1px 4px rgba(30,58,90,.18); }
+  .where .wt { min-width:0; }
+  .where .wn { font-weight:700; color:#1e3a5a; font-size:13.5px; }
+  .where .wn .en { font-weight:400; font-size:11.5px; color:#999; margin-left:4px; }
+  .where .wd { font-size:12px; color:#666; margin-top:1px; }
+  .where .wd a { font-size:11.5px; }
+
+  .how { font-size:12.5px; color:#6b5a33; }
+  .dur { white-space:nowrap; font-size:12.5px; color:#2c5f7c; font-weight:600; }
+  .tcol { white-space:nowrap; font-weight:600; color:#1e3a5a; }
+
+  .tip { background:#fbf7ec; border-left:4px solid #c9a24b; border-radius:8px;
+    padding:9px 13px; font-size:12.5px; color:#6b5a33; margin:4px 0 10px; }
+
+  .city-break {
+    background:#1e3a5a; color:#fff; border-radius:11px; padding:11px 18px; margin:26px 0 4px;
+    font-size:15px; font-weight:700; letter-spacing:1px;
+  }
+  .city-break small { font-size:12px; font-weight:400; opacity:.8; margin-left:8px; }
+
+  footer { text-align:center; color:#999; font-size:12px; margin-top:38px; }
+
+  /* ===== 编辑模式 ===== */
+  #editbar {
+    position:fixed; left:0; right:0; bottom:0; background:#1e3a5a; color:#fff;
+    padding:9px 14px; display:flex; gap:8px; align-items:center; z-index:99;
+    font-size:12.5px; flex-wrap:wrap; box-shadow:0 -2px 10px rgba(0,0,0,.15);
+  }
+  #editbar button {
+    background:#fff; color:#1e3a5a; border:none; border-radius:6px;
+    padding:5px 12px; font-size:12.5px; font-weight:600; cursor:pointer;
+  }
+  #editbar button:hover { background:#dce8ee; }
+  #editnote { opacity:.85; font-size:12px; display:none; }
+  body.editing #editnote { display:inline; }
+  body.editing td { outline:1px dashed #c9a24b; outline-offset:-1px; cursor:text; }
+  @media print { #editbar { display:none; } }
+  body { padding-bottom:110px; }
+
+  @media (max-width: 720px) {
+    .where img { width:72px; height:52px; }
+    th, td { padding:6px 7px; font-size:12px; }
+  }
+</style>
+</head>
+<body>
+<header>
+<h1>🇬🇧 英国行程 · 2026.09.08–09.18</h1>
+<p>2026.09.08 – 09.18 · 伦敦 7晚 → 科茨沃尔德 2晚 → 伦敦 1晚 · 两人 · 11 点起床节奏</p>
+</header>
+<div class="wrap">
+<div class="route">
+    🇬🇧 伦敦 D1–D5（Chelsea）→ 🌾 科茨沃尔德 D6–D7（租车）→ 🇬🇧 伦敦 D8–D10 → ✈️ D11 回国
+    <small>交通已定：比斯特租车 · 科茨沃尔德租车 · D5 打车 · D2/D9 包车 · D10 打车 · D11 送机 · ⏳ 只剩 D1 接机和 D3 市内待确认</small>
+<small>👗 <a href="英国行程-穿搭二级页.html">穿搭二级页：每天穿什么 + 哪几天拍照 →</a></small>
+</div>
+
+
+
+
+<!-- ==================== 交通 ==================== -->
+
+
+
+<!-- ==================== 酒店 ==================== -->
+
+
+<!-- ==================== 每日行程 ==================== -->
+<h2 class="sec">📅 每日行程</h2>
+<div class="city-break">🇬🇧 第一站 · 伦敦（D1–D5 住 Chelsea）</div>
+<h3 class="day-t"><span class="dnum">D1</span> 9/8 周二 · 落地休息日 <small>到达就是晚上，不安排行程</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr>
+<td class="tcol">18:05</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Gatwick_Airport_terminal_shuttle.jpg/1280px-Gatwick_Airport_terminal_shuttle.jpg"/><div class="wt"><div class="wn">盖特威克机场<span class="en">Gatwick (LGW)</span></div><div class="wd">落地、出关、取行李 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Gatwick+Airport" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">—</td><td class="dur">~1h</td><td class="st-free">—</td>
+</tr>
+<tr>
+<td class="tcol">19:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/11_Cadogan_Gardens_staircase_%2829269798194%29.jpg/1280px-11_Cadogan_Gardens_staircase_%2829269798194%29.jpg"/><div class="wt"><div class="wn">11 Cadogan Gardens 酒店<span class="en">Chelsea</span></div><div class="wd">check-in · <a href="https://www.google.com/maps/search/?api=1&amp;query=11+Cadogan+Gardens+Hotel+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">⏳ 接机待定（打车 £60–100 / 华人接机 / 火车+打车）</td><td class="dur">45–70min</td><td class="st-ok">✅ 已订</td>
+</tr>
+<tr><td class="tcol">20:30</td><td>直接睡觉，时差别硬扛</td><td class="how">—</td><td class="dur">—</td><td class="st-free">—</td></tr>
+</table>
+<h3 class="day-t"><span class="dnum">D2</span> 9/9 周三 · 东区轻逛 + 歌剧魅影之夜 <small>✅ 包车全天 · 古着线已砍 · 下午待定</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr>
+<td class="tcol">12:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Beigel_Bake%2C_Brick_Lane_%2833936265604%29.jpg/1280px-Beigel_Bake%2C_Brick_Lane_%2833936265604%29.jpg"/><div class="wt"><div class="wn">Beigel Bake 贝果店<span class="en">Brick Lane · 24h</span></div><div class="wd">传奇盐牛肉贝果 £5 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Beigel+Bake+Brick+Lane+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 包车 · 11:30 出发</td><td class="dur">30–45min</td><td class="st-free">免预约</td>
+</tr>
+<tr>
+<td class="tcol">12:45</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Street_art_off_Brick_Lane_-_geograph.org.uk_-_4329038.jpg/1280px-Street_art_off_Brick_Lane_-_geograph.org.uk_-_4329038.jpg"/><div class="wt"><div class="wn">Brick Lane 涂鸦街</div><div class="wd">吃完顺路看一眼就好 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Brick+Lane+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">步行</td><td class="dur">20–30min</td><td class="st-free">免费 · 可选</td>
+</tr>
+<tr>
+<td class="tcol">13:15</td>
+<td>📝 <b>下午待定</b>：到时候自己搜（参考：Redchurch Street 精品街 / Boxpark 集装箱市集 / 回 Soho 泡咖啡馆）</td>
+<td class="how">—</td><td class="dur">~2h</td><td class="st-wait">待定</td>
+</tr>
+<tr><td class="tcol">15:30</td><td>回酒店放东西 → 16:30 去 Soho</td><td class="how">✅ 包车</td><td class="dur">20–25min</td><td class="st-free">—</td></tr>
+<tr>
+<td class="tcol">17:00</td>
+<td><div class="where"><img alt="" src="https://www.bobbobricard.com/src/img/bobbobricard-soho-dining-room.jpg"/><div class="wt"><div class="wn">Bob Bob Ricard 晚餐<span class="en">Soho</span></div><div class="wd">按按钮上香槟的网红餐厅 · £70–100/人 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Bob+Bob+Ricard+Soho+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 包车</td><td class="dur">~1.5h</td><td class="st-ok">✅ 已订</td>
+</tr>
+<tr>
+<td class="tcol">19:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/His_Majesty%E2%80%99s_Theatre_London_August_2023.jpg/1280px-His_Majesty%E2%80%99s_Theatre_London_August_2023.jpg"/><div class="wt"><div class="wn">歌剧魅影<span class="en">@ His Majesty's Theatre</span></div><div class="wd">吊灯坠落名场面 · £28–90/人 · <a href="https://www.google.com/maps/search/?api=1&amp;query=His+Majesty%27s+Theatre+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">Soho 步行 ~10min</td><td class="dur">2.5h</td><td class="st-ok">✅ 已订</td>
+</tr>
+<tr><td class="tcol">22:00</td><td>回酒店</td><td class="how">✅ 包车</td><td class="dur">10–15min</td><td class="st-free">—</td></tr>
+</table>
+<h3 class="day-t"><span class="dnum">D3</span> 9/10 周四 · 西区逛街 + 出片晚餐 <small>Soho → Covent Garden → Fitzrovia</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr>
+<td class="tcol">12:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/Brewer_Street%2C_Soho_%2832639630304%29.jpg/1280px-Brewer_Street%2C_Soho_%2832639630304%29.jpg"/><div class="wt"><div class="wn">Soho 苏活区 brunch<span class="en">餐吧区</span></div><div class="wd">随便挑一家 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Soho+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">⏳ 暂定打车 £10–15</td><td class="dur">1h</td><td class="st-free">免预约</td>
+</tr>
+<tr>
+<td class="tcol">14:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/London%2C_Covent_Garden_--_2016_--_4879.jpg/1280px-London%2C_Covent_Garden_--_2016_--_4879.jpg"/><div class="wt"><div class="wn">Covent Garden 科文特花园</div><div class="wd">市集+街头表演 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Covent+Garden+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">步行</td><td class="dur">1.5h</td><td class="st-free">免费</td>
+</tr>
+<tr>
+<td class="tcol">15:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Seven_Dials_-_geograph.org.uk_-_6012954.jpg/1280px-Seven_Dials_-_geograph.org.uk_-_6012954.jpg"/><div class="wt"><div class="wn">Seven Dials 七晷区</div><div class="wd">独立设计师店 · <b>和 Covent Garden 紧挨着，步行 3–5min，不用二选一</b> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Seven+Dials+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">步行 3–5min</td><td class="dur">1h</td><td class="st-free">免费</td>
+</tr>
+<tr><td class="tcol">17:00</td><td>Soho 小巷街拍</td><td class="how">步行</td><td class="dur">1h</td><td class="st-free">免费</td></tr>
+<tr>
+<td class="tcol">19:00</td>
+<td><div class="where"><img alt="" src="https://cdn.sanity.io/images/aa3sekul/production/b6e8e06f6512c07222d0dd04ab115419608d3126-1200x643.jpg?w=1200&amp;auto=format"/><div class="wt"><div class="wn">Circolo Popolare 晚餐<span class="en">意大利菜 · 两万瓶酒墙</span></div><div class="wd">£40–60/人 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Circolo+Popolare+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">步行/打车 10min</td><td class="dur">~1.5h</td><td class="st-ok">✅ 已订</td>
+</tr>
+</table>
+<h3 class="day-t"><span class="dnum">D4</span> 9/11 周五 · 比斯特购物日 <small>✅ 租车已定</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr><td class="tcol">10:00</td><td>Sloane Square 附近取车（自动挡）</td><td class="how">✅ 租车 · 打车去取车点</td><td class="dur">—</td><td class="st-todo">⬜ 车未订</td></tr>
+<tr>
+<td class="tcol">12:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Bicester_Village_-_geograph.org.uk_-_1828514.jpg/1280px-Bicester_Village_-_geograph.org.uk_-_1828514.jpg"/><div class="wt"><div class="wn">比斯特购物村<span class="en">Bicester Village</span></div><div class="wd">先冲 Gucci/Prada → Burberry → Dior（全球唯一奥莱）→ 伴手礼 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Bicester+Village" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 自驾 ~105km · M40 北上</td><td class="dur">7h</td><td class="st-ok">✅ VIP卡+贵宾室已办（12:00 休息室）</td>
+</tr>
+<tr><td class="tcol">19:00</td><td>返程 → 20:30 还车</td><td class="how">✅ 自驾 ~1h30</td><td class="dur">1.5h</td><td class="st-free">—</td></tr>
+</table>
+<div class="tip">💡 出发前：① <a href="https://www.bicestervillage.com/" target="_blank">官网/微信注册 VIP</a> 凭护照领 9 折卡 ② 提前 3–7 天约 The Apartment 贵宾室（免费）③ 英国已取消退税，预算按不退税算 · 停车免费</div>
+<h3 class="day-t"><span class="dnum">D5</span> 9/12 周六 · 古董市集 + Magic Mike <small>✅ 打车已定</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr>
+<td class="tcol">12:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Portobello.market.london.arp.jpg/1280px-Portobello.market.london.arp.jpg"/><div class="wt"><div class="wn">Portobello Road 古董市集<span class="en">诺丁山 · 周六全开</span></div><div class="wd">古董银器+古着+街头小吃 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Portobello+Road+Market+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 打车 £12–18 · 12:00 出门 brunch 后出发</td><td class="dur">2.5h</td><td class="st-free">免费</td>
+</tr>
+<tr>
+<td class="tcol">15:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Colourful_houses_in_Lancaster_Road%2C_Notting_Hill_-_2020-07-05.jpg/1280px-Colourful_houses_in_Lancaster_Road%2C_Notting_Hill_-_2020-07-05.jpg"/><div class="wt"><div class="wn">诺丁山彩色房子<span class="en">Lancaster Rd 一带</span></div><div class="wd">顺路拐进去拍照 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Lancaster+Road+Notting+Hill+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">步行</td><td class="dur">30min</td><td class="st-free">免费</td>
+</tr>
+<tr><td class="tcol">17:00</td><td>→ Leicester Square，18:30 剧院附近喝一杯</td><td class="how">✅ 打车 £12–18</td><td class="dur">15–20min</td><td class="st-free">—</td></tr>
+<tr>
+<td class="tcol">19:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Hippodrome_Casino_at_Night%2C_London_2012-12-27.jpg/1280px-Hippodrome_Casino_at_Night%2C_London_2012-12-27.jpg"/><div class="wt"><div class="wn">Magic Mike Live<span class="en">@ Hippodrome Casino</span></div><div class="wd">360° 互动舞蹈秀 · £50 起 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Hippodrome+Casino+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">步行</td><td class="dur">1.5h</td><td class="st-todo">⬜ 弟弟弟妹负责 · 带护照</td>
+</tr>
+<tr><td class="tcol">20:30</td><td>结束 → Soho 夜宵</td><td class="how">步行/打车</td><td class="dur">—</td><td class="st-free">—</td></tr>
+</table>
+<div class="city-break">🌾 第二站 · 科茨沃尔德（D6–D8 · 租车）<small>酒店 ✅ 已订</small></div>
+<h3 class="day-t"><span class="dnum">D6</span> 9/13 周日 · 花市 → 进村 <small>✅ 打车去花市 + 租车进村</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr>
+<td class="tcol">11:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/London_-_Columbia_Flower_Market_-_2164.jpg/1280px-London_-_Columbia_Flower_Market_-_2164.jpg"/><div class="wt"><div class="wn">Columbia Road 花市<span class="en">仅周日 8:00–14:00</span></div><div class="wd">我们到得晚只剩 2h，挑最好的花 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Columbia+Road+Flower+Market+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 打车 £18–28</td><td class="dur">1.5h</td><td class="st-free">免费</td>
+</tr>
+<tr><td class="tcol">13:00</td><td>花市附近 brunch → 回酒店取行李</td><td class="how">✅ 打车</td><td class="dur">1h</td><td class="st-free">—</td></tr>
+<tr><td class="tcol">14:00</td><td>Sloane Square 取车（自动挡）→ 出发科茨沃尔德</td><td class="how">✅ 租车 ~140km</td><td class="dur">2–2.5h</td><td class="st-todo">⬜ 车未订</td></tr>
+<tr>
+<td class="tcol">16:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Market_Square%2C_Stow-on-the-Wold_-_geograph.org.uk_-_5601438.jpg/1280px-Market_Square%2C_Stow-on-the-Wold_-_geograph.org.uk_-_5601438.jpg"/><div class="wt"><div class="wn">Stow-on-the-Wold<span class="en">山上小镇</span></div><div class="wd">蜂蜜色石头镇 · check-in 后傍晚散步 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Stow-on-the-Wold" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">自驾</td><td class="dur">1–1.5h</td><td class="st-ok">✅ 酒店已订</td>
+</tr>
+<tr>
+<td class="tcol">19:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Eagle_and_Child_Pub%2C_Stow-on-the-Wold.jpg/1280px-Eagle_and_Child_Pub%2C_Stow-on-the-Wold.jpg"/><div class="wt"><div class="wn">乡村酒馆晚餐</div><div class="wd">烤鸡、派、本地啤酒</div></div></div></td>
+<td class="how">步行</td><td class="dur">1.5h</td><td class="st-free">随到随吃</td>
+</tr>
+</table>
+<h3 class="day-t"><span class="dnum">D7</span> 9/14 周一 · 科茨沃尔德 · 📡 直播日① <small>✅ 村内自驾 · 第 2 晚</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr>
+<td class="tcol">11:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Bourton-on-the-Water_-_geograph.org.uk_-_3046412.jpg/1280px-Bourton-on-the-Water_-_geograph.org.uk_-_3046412.jpg"/><div class="wt"><div class="wn">Bourton-on-the-Water<span class="en">水上伯顿</span></div><div class="wd">小石桥+浅河，发呆圣地 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Bourton-on-the-Water" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 自驾</td><td class="dur">1.25h</td><td class="st-free">免费</td>
+</tr>
+<tr><td class="tcol">13:00</td><td>📡 <b>直播 ①</b>（北京 20:00–23:00 黄金档）· 酒店房间/花园当背景 · 乡村主题</td><td class="how">—</td><td class="dur">3h</td><td class="st-wait">📡 直播日</td></tr>
+<tr>
+<td class="tcol">16:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Arlington_Row_Bibury.jpg/1280px-Arlington_Row_Bibury.jpg"/><div class="wt"><div class="wn">Bibury 阿灵顿排屋<span class="en">Arlington Row</span></div><div class="wd">英国护照内页上的那排石屋 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Arlington+Row+Bibury" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 自驾</td><td class="dur">1h</td><td class="st-free">免费</td>
+</tr>
+<tr>
+<td class="tcol">17:45</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Castle_Combe%2C_Cottages_-_geograph.org.uk_-_6999508.jpg/1280px-Castle_Combe%2C_Cottages_-_geograph.org.uk_-_6999508.jpg"/><div class="wt"><div class="wn">Castle Combe<span class="en">库姆堡</span></div><div class="wd">"英格兰最美村庄" · 这个点到正好赶上黄昏金光 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Castle+Combe" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 自驾</td><td class="dur">1–1.5h</td><td class="st-free">免费</td>
+</tr>
+<tr><td class="tcol">19:15</td><td>酒馆晚餐</td><td class="how">步行</td><td class="dur">1.5h</td><td class="st-free">—</td></tr>
+</table>
+<div class="tip">💡 下午 13:00–16:00 直播，逛村拆成上午+傍晚两段；Castle Combe 排在黄昏（9 月中日落约 19:15）光线最好，旅行团也走了 · ⚠️ 直播前确认酒店 WiFi 上行带宽</div>
+<div class="city-break">🇬🇧 回到伦敦（D8–D10）<small>酒店 ✅ 已订 · D9 包车 · D10 打车</small></div>
+<h3 class="day-t"><span class="dnum">D8</span> 9/15 周二 · 中午回伦敦 · Liberty · 中餐 <small>✅ 租车回 · 市内打车</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr><td class="tcol">9:30</td><td>早出发回伦敦（村里不再逛）→ 12:00 到，先吃午饭</td><td class="how">✅ 自驾 ~140km · 还车</td><td class="dur">2–2.5h</td><td class="st-free">—</td></tr>
+<tr><td class="tcol">14:00</td><td>酒店 check-in</td><td class="how">✅ 打车</td><td class="dur">—</td><td class="st-ok">✅ 已订</td></tr>
+<tr>
+<td class="tcol">15:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Liberty_of_London.jpg/1280px-Liberty_of_London.jpg"/><div class="wt"><div class="wn">Liberty 百货<span class="en">都铎木梁大楼</span></div><div class="wd">印花布料+香水区，建筑本身就是景点 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Liberty+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 打车 ~15min</td><td class="dur">2h</td><td class="st-free">免费逛</td>
+</tr>
+<tr>
+<td class="tcol">18:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a6/London%2C_China_Town_--_2016_--_4868.jpg/1280px-London%2C_China_Town_--_2016_--_4868.jpg"/><div class="wt"><div class="wn">峨眉一派 晚餐<span class="en">唐人街 · 川菜</span></div><div class="wd">救胃中餐 · £25–35/人 · <a href="https://www.google.com/maps/search/?api=1&amp;query=峨眉一派+伦敦唐人街" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">Liberty 步行 10min</td><td class="dur">1.5h</td><td class="st-free">免预约</td>
+</tr>
+<tr><td class="tcol">19:30</td><td>回酒店休息</td><td class="how">✅ 打车 £8–12</td><td class="dur">10–15min</td><td class="st-free">—</td></tr>
+</table>
+<h3 class="day-t"><span class="dnum">D9</span> 9/16 周三 · V&amp;A + Marylebone + 大本钟 + Soho 夜逛 <small>✅ 包车全天</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr>
+<td class="tcol">12:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Victoria_and_Albert_Museum-1.jpg/1280px-Victoria_and_Albert_Museum-1.jpg"/><div class="wt"><div class="wn">V&amp;A 博物馆<span class="en">装饰艺术博物馆</span></div><div class="wd">女性版画展(免费) + 中国工艺(免费) + Schiaparelli 特展 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Victoria+and+Albert+Museum+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 包车 ~15min</td><td class="dur">2h</td><td class="st-ok">✅ 已订</td>
+</tr>
+<tr>
+<td class="tcol">14:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Marylebone_High_Street%2C_London_%28January_2024%29_01.jpg/1280px-Marylebone_High_Street%2C_London_%28January_2024%29_01.jpg"/><div class="wt"><div class="wn">Marylebone High Street<span class="en">先午饭再逛</span></div><div class="wd">小众香水+精品家居 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Marylebone+High+Street+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 包车 ~15min</td><td class="dur">1h</td><td class="st-free">免费</td>
+</tr>
+<tr>
+<td class="tcol">16:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Daunt_Books_Marylebone_2025-02-01.jpg/1280px-Daunt_Books_Marylebone_2025-02-01.jpg"/><div class="wt"><div class="wn">Daunt Books 书店<span class="en">伦敦最美书店</span></div><div class="wd">橡木回廊+天窗，帆布袋伴手礼 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Daunt+Books+Marylebone+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">步行（就在高街上）</td><td class="dur">30min</td><td class="st-free">免费</td>
+</tr>
+<tr>
+<td class="tcol">18:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Big_Ben_at_sunset_-_2014-10-27_17-30.jpg/1280px-Big_Ben_at_sunset_-_2014-10-27_17-30.jpg"/><div class="wt"><div class="wn">大本钟 + 国会大厦<span class="en">Big Ben</span></div><div class="wd">黄昏从威斯敏斯特桥上拍 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Big+Ben+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 包车 ~10min</td><td class="dur">45min</td><td class="st-free">免费</td>
+</tr>
+<tr>
+<td class="tcol">19:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Carnaby_London.jpg/1280px-Carnaby_London.jpg"/><div class="wt"><div class="wn">Soho 夜逛 · Carnaby Street<span class="en">+ Kingly Court</span></div><div class="wd">潮牌街+三层餐厅小院，晚餐在这解决 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Carnaby+Street+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 包车 ~10min · 21:30 前回酒店</td><td class="dur">2.5h</td><td class="st-free">免费</td>
+</tr>
+</table>
+<h3 class="day-t"><span class="dnum">D10</span> 9/17 周四 · 📡 直播日② · Harrods + House of CB + 晚场 Cabaret <small>打车/步行（Harrods 离酒店 5min）</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr>
+<td class="tcol">11:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Harrods_from_Hans_Road%2C_Knightsbridge%2C_September_2024.jpg/1280px-Harrods_from_Hans_Road%2C_Knightsbridge%2C_September_2024.jpg"/><div class="wt"><div class="wn">Harrods 哈罗德百货</div><div class="wd">Food Hall 顺便解决早午餐 · Rewards 会员 10% 返点 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Harrods+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">打车 5min · £8–12（或步行 15min）</td><td class="dur">1.5h</td><td class="st-free">免费逛</td>
+</tr>
+<tr><td class="tcol">13:00</td><td>📡 <b>直播 ②</b>（北京 20:00–23:00 黄金档）· 酒店房间当背景 · 伦敦购物主题</td><td class="how">回酒店 5min</td><td class="dur">3h</td><td class="st-wait">📡 直播日</td></tr>
+<tr>
+<td class="tcol">16:15</td>
+<td><div class="where"><img alt="" src="https://d166chel5lrjm5.cloudfront.net/images_react/og_general.jpg"/><div class="wt"><div class="wn">House of CB<span class="en">英国辣妹裙品牌</span></div><div class="wd">实体店试穿（老板说半小时够）· 买的新裙子晚上直接穿去看秀 · <a href="https://www.google.com/maps/search/?api=1&amp;query=House+of+CB+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">打车 ~15min</td><td class="dur">0.5h</td><td class="st-free">免费逛</td>
+</tr>
+<tr><td class="tcol">16:45</td><td>空档：附近咖啡厅坐坐 / 回酒店休整补妆</td><td class="how">步行/打车</td><td class="dur">1.5h</td><td class="st-free">—</td></tr>
+<tr>
+<td class="tcol">18:45</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Entrance_to_the_Playhouse_Theatre%2C_London_-_geograph.org.uk_-_4531499.jpg/1280px-Entrance_to_the_Playhouse_Theatre%2C_London_-_geograph.org.uk_-_4531499.jpg"/><div class="wt"><div class="wn">Cabaret《歌厅》<span class="en">Kit Kat Club 沉浸式音乐剧</span></div><div class="wd">Playhouse Theatre · 19:30 开场，建议提前 45min 到（俱乐部区有暖场表演）· 散场 ~22:15 去旁边 Soho 吃夜宵 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Playhouse+Theatre+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">打车 ~15min</td><td class="dur">~2h45 含中场</td><td class="st-todo">⬜ 票待助理订</td>
+</tr>
+</table>
+<h3 class="day-t"><span class="dnum">D11</span> 9/18 周五 · 观光巴士 + 按摩 → 回国 <small>✅ 包车送机已定</small></h3>
+<table>
+<tr><th style="width:88px">时间</th><th>去哪</th><th style="width:170px">怎么去</th><th style="width:80px">花多久</th><th style="width:96px">状态</th></tr>
+<tr><td class="tcol">12:00</td><td>退房，行李寄存前台</td><td class="how">—</td><td class="dur">—</td><td class="st-free">—</td></tr>
+<tr>
+<td class="tcol">12:30</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Arriva_The_Original_Tour_open_top_tour_bus_EMB765_MCW_Metrobus_E965_JAR_London_25_January_2009.jpg/1280px-Arriva_The_Original_Tour_open_top_tour_bus_EMB765_MCW_Metrobus_E965_JAR_London_25_January_2009.jpg"/><div class="wt"><div class="wn">观光巴士午餐<span class="en">Bustronome / Big Bus</span></div><div class="wd">双层巴士上吃法餐，边吃边看地标 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Bustronome+London" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">步行/打车</td><td class="dur">~2h</td><td class="st-ok">✅ 已订 59563</td>
+</tr>
+<tr>
+<td class="tcol">15:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/9/90/Cadogan_Gardens%2C_Chelsea_-_geograph.org.uk_-_3187344.jpg"/><div class="wt"><div class="wn">按摩 1 小时<span class="en">Cowshed / 酒店 Spa</span></div><div class="wd">赶飞机前放松</div></div></div></td>
+<td class="how">步行/打车</td><td class="dur">1h</td><td class="st-todo">⬜ 未约</td>
+</tr>
+<tr>
+<td class="tcol">16:00</td>
+<td><div class="where"><img alt="" src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Gatwick_Airport_stn_South_Terminal_concourse.jpg/1280px-Gatwick_Airport_stn_South_Terminal_concourse.jpg"/><div class="wt"><div class="wn">盖特威克机场<span class="en">17:00 到刚好</span></div><div class="wd">值机+托运+免税店 · 20:20 起飞 · <a href="https://www.google.com/maps/search/?api=1&amp;query=Gatwick+Airport" target="_blank">📍 地图</a></div></div></div></td>
+<td class="how">✅ 包车送机 45–60min</td><td class="dur">—</td><td class="st-todo">⬜ 包车待报价</td>
+</tr>
+</table>
+<!-- ==================== 预算 ==================== -->
+
+
+
+<!-- ==================== 准备 ==================== -->
+
+
+
+</div>
+
+
+</body>
+</html>
